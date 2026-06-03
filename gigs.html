@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Gigs – Chai und Brezeln</title>
+    <style>
+      body {
+        background: #ffe9d6;
+        font-family: "Comic Sans MS", cursive;
+        padding: 40px;
+        cursor: none;
+        position: relative;
+        overflow-x: hidden;
+        text-align: center;
+      }
+      #customCursor {
+        position: fixed;
+        width: 40px;
+        height: 40px;
+        pointer-events: none;
+        z-index: 9999;
+        transform: translate(-50%, -50%);
+      }
+      .stage-light {
+        position: absolute;
+        width: 90px;
+        height: 90px;
+        border-radius: 50%;
+        border: 8px solid rgba(255, 255, 255, 0.85);
+        box-shadow: 0 0 30px rgba(255, 255, 255, 0.8);
+        top: 20px;
+        left: 20px;
+        z-index: 1;
+      }
+      .stage-light--right {
+        left: auto;
+        right: 20px;
+        background: rgba(255, 255, 153, 0.12);
+      }
+      .gig-vibe {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 20px;
+        z-index: 2;
+        position: relative;
+        transform: rotate(-1deg);
+      }
+      .gig-vibe span {
+        font-size: 2rem;
+      }
+      .sparkle {
+        position: fixed;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.95);
+        box-shadow: 0 0 14px rgba(255, 255, 255, 0.9);
+        pointer-events: none;
+        z-index: 3;
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+        transition:
+          transform 0.35s ease,
+          opacity 0.35s ease,
+          left 0.35s ease,
+          top 0.35s ease;
+      }
+      .back-link {
+        display: inline-block;
+        background: #ffff66;
+        color: #000;
+        text-decoration: none;
+        border: 3px solid #000;
+        padding: 12px 18px;
+        transform: rotate(-3deg);
+        font-size: 1.2rem;
+        margin-bottom: 20px;
+        box-shadow: 4px 4px 0 #000;
+        position: relative;
+        z-index: 2;
+      }
+      .back-link:hover {
+        background: #ffdd33;
+        transform: rotate(3deg) scale(1.05);
+      }
+      h1 {
+        font-size: 4rem;
+        color: #00cc88;
+        transform: rotate(2deg);
+        text-shadow: 3px 3px #000;
+        position: relative;
+        z-index: 2;
+      }
+      .gig {
+        background: #ffdd33;
+        border: 3px solid #000;
+        padding: 20px;
+        margin: 30px 0;
+        width: fit-content;
+        transform: rotate(-2deg);
+        position: relative;
+        transition:
+          transform 0.15s ease,
+          background 0.15s ease;
+        z-index: 2;
+      }
+      .gig::before {
+        content: "🎸";
+        position: absolute;
+        left: -40px;
+        top: -10px;
+        font-size: 2rem;
+      }
+      .gig::after {
+        content: "🎵";
+        position: absolute;
+        right: -36px;
+        bottom: -10px;
+        font-size: 1.8rem;
+        transform: rotate(15deg);
+      }
+      .gig:hover {
+        background: #ffff66;
+        transform: rotate(2deg) scale(1.02);
+      }
+    </style>
+  </head>
+  <body>
+    <img id="customCursor" src="pretzel.png" />
+    <div class="stage-light"></div>
+    <div class="stage-light stage-light--right"></div>
+
+    <a class="back-link" href="index.html">← Back to Home</a>
+
+    <h1>Gigs</h1>
+
+    <div class="gig">
+      Heimfelder Stadtteilfest – 13.06. @ 17:00 at Heimfelderstrasse
+    </div>
+    <div class="gig">TUHH Sommerfest – 17.06. @ 17:00 PM at TUHH Lake</div>
+    <div class="gig">NerdBar – 07.07. @ 19:30 PM at TUHH LuK</div>
+
+    <script src="cursor.js"></script>
+    <script>
+      let lastSparkle = 0;
+
+      function createSparkle(x, y) {
+        const sparkle = document.createElement("div");
+        sparkle.className = "sparkle";
+        sparkle.style.left = x + "px";
+        sparkle.style.top = y + "px";
+        document.body.appendChild(sparkle);
+        requestAnimationFrame(() => {
+          sparkle.style.left = x + (Math.random() * 40 - 20) + "px";
+          sparkle.style.top = y + (Math.random() * 40 - 20) + "px";
+          sparkle.style.transform = "translate(-50%, -50%) scale(1.7)";
+          sparkle.style.opacity = "0";
+        });
+        setTimeout(() => sparkle.remove(), 360);
+      }
+
+      CursorController.init({
+        onMouseMove: (e) => {
+          if (e.timeStamp - lastSparkle > 40) {
+            lastSparkle = e.timeStamp;
+            createSparkle(e.pageX, e.pageY);
+          }
+        }
+      });
+    </script>
+  </body>
+</html>

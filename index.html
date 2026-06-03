@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Chai und Brezeln</title>
+    <style>
+      /* --- GENERAL CHAOS --- */
+      body {
+        background: #ffe9d6 url("chai-stain.png") repeat;
+        font-family: "Comic Sans MS", cursive, sans-serif;
+        margin: 0;
+        padding: 0;
+        overflow-x: hidden;
+        cursor: none; /* hide default cursor */
+      }
+
+      /* --- CUSTOM CURSOR --- */
+      #customCursor {
+        position: fixed;
+        width: 40px;
+        height: 40px;
+        pointer-events: none;
+        z-index: 9999;
+        transform: translate(-50%, -50%);
+      }
+
+      /* --- HERO --- */
+      .hero {
+        text-align: center;
+        padding: 120px 20px;
+        background: #ff00aa;
+        color: #00ff66;
+        font-size: 4rem;
+        font-weight: bold;
+        transform: rotate(-2deg);
+        text-shadow: 3px 3px #000;
+      }
+
+      /* --- BUTTONS --- */
+      .nav-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 30px;
+        margin-top: -40px;
+      }
+
+      .nav-buttons a {
+        background: #ffff66;
+        padding: 20px 30px;
+        font-size: 1.5rem;
+        color: #000;
+        text-decoration: none;
+        border: 3px solid #000;
+        transform: rotate(-3deg);
+        display: inline-block;
+        transition: 0.1s;
+      }
+
+      .nav-buttons a:hover {
+        transform: rotate(3deg) scale(1.1);
+        background: #ffdd33;
+      }
+
+      /* --- BACK LINK --- */
+      .back-link {
+        display: inline-block;
+        background: #ffff66;
+        color: #000;
+        text-decoration: none;
+        border: 3px solid #000;
+        padding: 12px 18px;
+        transform: rotate(-3deg);
+        font-size: 1.2rem;
+        margin-bottom: 20px;
+        box-shadow: 4px 4px 0 #000;
+        position: relative;
+        z-index: 2;
+      }
+
+      .back-link:hover {
+        background: #ffdd33;
+        transform: rotate(3deg) scale(1.05);
+      }
+
+      /* --- WELCOME TEXT --- */
+      .welcome {
+        margin: 80px auto;
+        width: 70%;
+        font-size: 1.8rem;
+        line-height: 1.5;
+        transform: rotate(1deg);
+      }
+    </style>
+  </head>
+  <body>
+    <!-- CUSTOM CURSOR -->
+    <img id="customCursor" src="pretzel.png" />
+
+    <!-- BACK TO HOME (hidden on index) -->
+    <a class="back-link" href="index.html" style="display: none;">← Back to Home</a>
+
+    <!-- HERO -->
+    <div class="hero">CHAI UND BREZELN</div>
+
+    <!-- NAV BUTTONS -->
+    <div class="nav-buttons">
+      <a href="./about.html">About</a>
+      <a href="./gigs.html">Gigs</a>
+      <a href="./contact.html">Contact</a>
+      <a href="./music.html">Music</a>
+    </div>
+
+    <!-- WELCOME TEXT -->
+    <div class="welcome">
+      Welcome to the official, completely unprofessional, slightly
+      chaotic website of <b>Chai und Brezeln</b>. We have no taglines,
+      no deep messages and definitely no plan. Just music, chai,
+      pretzels and fun.
+    </div>
+
+    <script src="cursor.js"></script>
+    <script>
+      CursorController.init();
+    </script>
+  </body>
+</html>

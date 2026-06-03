@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>Kontakt – Chai und Brezeln</title>
+<style>
+body {
+    background: #fffbe6;
+    font-family: 'Comic Sans MS', cursive;
+    padding: 40px;
+    cursor: none;
+    text-align: center;
+}
+#customCursor {
+    position: fixed;
+    width: 40px;
+    height: 40px;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+}
+h1 {
+    font-size: 4rem;
+    color: #ff6600;
+    transform: rotate(-3deg);
+    text-shadow: 3px 3px #000;
+}
+form {
+    background: #ffff99;
+    border: 3px solid #000;
+    padding: 30px;
+    width: 60%;
+    transform: rotate(1deg);
+    margin: 30px auto;
+}
+input, textarea {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 2px solid #000;
+    font-family: inherit;
+}
+button {
+    padding: 15px 30px;
+    background: #ffdd33;
+    border: 3px solid #000;
+    font-size: 1.5rem;
+    transform: rotate(-2deg);
+}
+button:hover {
+    transform: rotate(2deg) scale(1.1);
+}
+.back-link {
+    display: inline-block;
+    background: #ffff66;
+    color: #000;
+    text-decoration: none;
+    border: 3px solid #000;
+    padding: 12px 18px;
+    transform: rotate(-3deg);
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+    box-shadow: 4px 4px 0 #000;
+    position: relative;
+    z-index: 2;
+}
+.back-link:hover {
+    background: #ffdd33;
+    transform: rotate(3deg) scale(1.05);
+}
+</style>
+</head>
+<body>
+
+<a class="back-link" href="index.html">← Back to Home</a>
+
+<img id="customCursor" src="pretzel.png">
+
+<h1>Kontakt</h1>
+
+<form>
+    <label>Name</label>
+    <input type="text">
+
+    <label>Email</label>
+    <input type="email">
+
+    <label>Nachricht</label>
+    <textarea rows="5"></textarea>
+
+    <button type="submit">Senden… vielleicht</button>
+</form>
+
+<script src="cursor.js"></script>
+<script>
+CursorController.init();
+</script>
+
+</body>
+</html>

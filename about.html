@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Über uns – Chai und Brezeln</title>
+    <style>
+      body {
+        background: #fff7e6;
+        font-family: "Comic Sans MS", cursive;
+        margin: 0;
+        padding: 40px;
+        cursor: none;
+        text-align: center;
+      }
+      #customCursor {
+        position: fixed;
+        width: 40px;
+        height: 40px;
+        pointer-events: none;
+        z-index: 9999;
+        transform: translate(-50%, -50%);
+      }
+      h1 {
+        font-size: 4rem;
+        color: #ff00aa;
+        transform: rotate(-3deg);
+        text-shadow: 3px 3px #000;
+      }
+      .members-container {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 60px;
+        margin: 40px auto;
+        max-width: 900px;
+      }
+      .member {
+        padding: 20px;
+        border: 3px solid #000;
+        background: #ffff66;
+        width: 100%;
+        margin: 20px;
+        box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.2);
+        position: relative;
+        z-index: 1;
+        transition:
+          transform 0.15s ease,
+          background 0.15s ease,
+          box-shadow 0.15s ease;
+        cursor: pointer;
+      }
+      .member:nth-child(1) {
+        transform: rotate(-3deg);
+        background: #ffd966;
+      }
+      .member:nth-child(2) {
+        transform: rotate(2deg);
+        background: #ffff99;
+      }
+      .member:nth-child(3) {
+        transform: rotate(-1deg);
+        background: #ffff66;
+      }
+      .member:nth-child(4) {
+        transform: rotate(3deg);
+        background: #fffacd;
+      }
+      .member:hover {
+        transform: rotate(0deg) scale(1.08);
+        background: #ffdd33;
+        box-shadow: 12px 12px 0 rgba(0, 0, 0, 0.3);
+      }
+      .member h2 {
+        margin-top: 0;
+        font-size: 1.3rem;
+        color: #000;
+      }
+      .back-link {
+        display: inline-block;
+        background: #ffff66;
+        color: #000;
+        text-decoration: none;
+        border: 3px solid #000;
+        padding: 12px 18px;
+        transform: rotate(-3deg);
+        font-size: 1.2rem;
+        margin-bottom: 5px;
+        box-shadow: 4px 4px 0 #000;
+        position: relative;
+        z-index: 2;
+      }
+      .back-link:hover {
+        background: #ffdd33;
+        transform: rotate(3deg) scale(1.05);
+      }
+    </style>
+  </head>
+
+  <body>
+    <a class="back-link" href="index.html">← Back to Home</a>
+    <img id="customCursor" src="pretzel.png" />
+
+    <h1>About us</h1>
+
+    <div class="members-container">
+      <div class="member" data-instrument="drums">
+        <h2>Jakob – the Drummer</h2>
+        Never too late. Hits things professionally.
+      </div>
+
+      <div class="member" data-instrument="bass">
+        <h2>Srinath – the Bassist</h2>
+        Loves Chai n' Groove. Clichés, why not?.
+      </div>
+
+      <div class="member" data-instrument="guitar">
+        <h2>Varun – the Guitarist</h2>
+        Loves blues but loves to shred even more.
+      </div>
+
+      <div class="member" data-instrument="vocals">
+        <h2>Vincent – the Vocalist</h2>
+        Plays all instruments. But loves to sing the most.
+      </div>
+    </div>
+
+    <script src="cursor.js"></script>
+    <script>
+      CursorController.init();
+
+      // Sound effects for each instrument
+      const SoundEffects = (() => {
+        const audioContext = new (
+          window.AudioContext || window.webkitAudioContext
+        )();
+
+        function playDrumRoll() {
+          const now = audioContext.currentTime;
+          for (let i = 0; i < 8; i++) {
+            const osc = audioContext.createOscillator();
+            const gain = audioContext.createGain();
+            osc.connect(gain);
+            gain.connect(audioContext.destination);
+
+            osc.frequency.value = 100 + Math.random() * 50;
+            osc.type = "square";
+            gain.gain.setValueAtTime(0.1, now + i * 0.06);
+            gain.gain.exponentialRampToValueAtTime(0.01, now + i * 0.06 + 0.05);
+
+            osc.start(now + i * 0.06);
+            osc.stop(now + i * 0.06 + 0.05);
+          }
+        }
+
+        function playBassNote() {
+          const now = audioContext.currentTime;
+          
+          // Percussive slap attack
+          const slapGain = audioContext.createGain();
+          const slapOsc = audioContext.createOscillator();
+          slapOsc.connect(slapGain);
+          slapGain.connect(audioContext.destination);
+          slapOsc.frequency.value = 150;
+          slapOsc.type = "square";
+          slapGain.gain.setValueAtTime(0.3, now);
+          slapGain.gain.exponentialRampToValueAtTime(0.05, now + 0.08);
+          slapOsc.start(now);
+          slapOsc.stop(now + 0.08);
+          
+          // Bass note following the slap
+          const bassGain = audioContext.createGain();
+          const bassOsc = audioContext.createOscillator();
+          bassOsc.connect(bassGain);
+          bassGain.connect(audioContext.destination);
+          bassOsc.frequency.value = 55;
+          bassOsc.type = "sine";
+          bassGain.gain.setValueAtTime(0.15, now + 0.08);
+          bassGain.gain.exponentialRampToValueAtTime(0.01, now + 0.5);
+          bassOsc.start(now + 0.08);
+          bassOsc.stop(now + 0.5);
+        }
+
+        function playGuitarPluck() {
+          const osc = audioContext.createOscillator();
+          const gain = audioContext.createGain();
+          osc.connect(gain);
+          gain.connect(audioContext.destination);
+
+          const now = audioContext.currentTime;
+          osc.frequency.setValueAtTime(400, now);
+          osc.frequency.exponentialRampToValueAtTime(100, now + 0.3);
+          osc.type = "triangle";
+          gain.gain.setValueAtTime(0.2, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+
+          osc.start(now);
+          osc.stop(now + 0.3);
+        }
+
+        function playVocalTone() {
+          const now = audioContext.currentTime;
+          
+          // Main vocal tone
+          const osc = audioContext.createOscillator();
+          const gain = audioContext.createGain();
+          osc.connect(gain);
+          gain.connect(audioContext.destination);
+          
+          // Vibrato effect
+          const vibrato = audioContext.createOscillator();
+          const vibratoGain = audioContext.createGain();
+          vibrato.connect(vibratoGain);
+          vibratoGain.connect(osc.frequency);
+          
+          osc.frequency.value = 280;
+          osc.type = "sine";
+          vibrato.frequency.value = 5;
+          vibratoGain.gain.value = 30;
+          
+          gain.gain.setValueAtTime(0.12, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.6);
+          
+          osc.start(now);
+          vibrato.start(now);
+          osc.stop(now + 0.6);
+          vibrato.stop(now + 0.6);
+        }
+
+        return {
+          playDrumRoll,
+          playBassNote,
+          playGuitarPluck,
+          playVocalTone,
+        };
+      })();
+
+      // Add hover sound effects to members
+      document.querySelectorAll(".member").forEach((member) => {
+        member.addEventListener("mouseenter", () => {
+          const instrument = member.dataset.instrument;
+          switch (instrument) {
+            case "drums":
+              SoundEffects.playDrumRoll();
+              break;
+            case "bass":
+              SoundEffects.playBassNote();
+              break;
+            case "guitar":
+              SoundEffects.playGuitarPluck();
+              break;
+            case "vocals":
+              SoundEffects.playVocalTone();
+              break;
+          }
+        });
+      });
+    </script>
+  </body>
+</html>

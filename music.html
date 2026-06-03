@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>Musik – Chai und Brezeln</title>
+<style>
+body {
+    background: #fff0f5;
+    font-family: 'Comic Sans MS', cursive;
+    padding: 40px;
+    cursor: none;
+    text-align: center;
+}
+#customCursor {
+    position: fixed;
+    width: 40px;
+    height: 40px;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+}
+h1 {
+    font-size: 4rem;
+    color: #ff00aa;
+    transform: rotate(-4deg);
+    text-shadow: 3px 3px #000;
+}
+.track {
+    background: #caff77;
+    border: 3px solid #000;
+    padding: 20px;
+    margin: 30px 0;
+    transform: rotate(1deg);
+}
+.back-link {
+    display: inline-block;
+    background: #ffff66;
+    color: #000;
+    text-decoration: none;
+    border: 3px solid #000;
+    padding: 12px 18px;
+    transform: rotate(-3deg);
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+    box-shadow: 4px 4px 0 #000;
+    position: relative;
+    z-index: 2;
+}
+.back-link:hover {
+    background: #ffdd33;
+    transform: rotate(3deg) scale(1.05);
+}
+</style>
+</head>
+<body>
+
+<a class="back-link" href="index.html">← Back to Home</a>
+
+<img id="customCursor" src="pretzel.png">
+
+<h1>Musik</h1>
+
+<div class="track">
+    <h2>Song 1</h2>
+    <audio controls src="song1.mp3"></audio>
+</div>
+
+<div class="track">
+    <h2>Song 2</h2>
+    <audio controls src="song2.mp3"></audio>
+</div>
+
+<script src="cursor.js"></script>
+<script>
+CursorController.init();
+</script>
+
+</body>
+</html>
