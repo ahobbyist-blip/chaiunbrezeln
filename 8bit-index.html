@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chai und Brezeln | ARCADE STATION</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+        }
+
+        /* --- THEME PALETTES (Matches arcade style) --- */
+        :root {
+            --bg-color: #0d0214;
+            --panel-border: #ff007f;
+            --text-main: #ffffff;
+            --arcade-green: #39ff14;
+            --arcade-pink: #ff007f;
+            --arcade-blue: #00f0ff;
+            --card-bg: #13031f;
+            --toggle-bg: #ff007f;
+            --toggle-text: "DRK";
+        }
+
+        [data-theme="light"] {
+            --bg-color: #f4f6f0;
+            --panel-border: #008833;
+            --text-main: #111111;
+            --arcade-green: #008833;
+            --arcade-pink: #cc0066;
+            --arcade-blue: #006699;
+            --card-bg: #e1e6d5;
+            --toggle-bg: #008833;
+            --toggle-text: "LITE";
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Press Start 2P', monospace;
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: background-color 0.15s steps(2);
+        }
+
+        /* --- RETRO MAIN CABINET SCREEN --- */
+        .arcade-cabinet {
+            width: 95vw;
+            height: 92vh;
+            max-width: 1100px;
+            max-height: 700px;
+            border: 4px solid var(--panel-border);
+            background: var(--card-bg);
+            padding: 2rem;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.8);
+        }
+
+        /* Scanline Overlay Vibe */
+        .arcade-cabinet::before {
+            content: " ";
+            display: block;
+            position: absolute;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            z-index: 10;
+            background-size: 100% 4px, 6px 100%;
+            pointer-events: none;
+        }
+
+        /* Top Header Area */
+        .cabinet-header {
+            text-align: center;
+            border-bottom: 3px double var(--panel-border);
+            padding-bottom: 1rem;
+        }
+
+        .band-name {
+            font-size: 14px;
+            color: var(--arcade-green);
+            margin-bottom: 0.5rem;
+        }
+
+        /* --- CHROMATIC GLITCH HOVER ENGINE --- */
+        .glitch-title {
+            position: relative;
+            font-size: 1.6rem;
+            color: #fff;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: transform 0.05s ease-out;
+        }
+
+        /* Glitch triggers on hover */
+        .glitch-title:hover {
+            animation: glitch-skew 0.3s steps(2) forwards;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .glitch-title::before, .glitch-title::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: transparent;
+            opacity: 0; /* Hidden by default */
+            transition: opacity 0.1s ease-out;
+        }
+
+        /* Show the glitch layers on hover */
+        .glitch-title:hover::before, .glitch-title:hover::after {
+            opacity: 1;
+        }
+
+        .glitch-title::before {
+            left: 2px;
+            text-shadow: -2px 0 var(--arcade-pink);
+            clip: rect(44px, 450px, 56px, 0);
+            animation: glitch-anim 0.5s infinite linear alternate-reverse;
+            color: #ff00ff;
+        }
+
+        .glitch-title::after {
+            left: -2px;
+            text-shadow: -2px 0 var(--arcade-blue), 0 2px var(--arcade-pink);
+            clip: rect(85px, 450px, 140px, 0);
+            animation: glitch-anim2 0.5s infinite linear alternate-reverse;
+            color: #00ffff;
+        }
+
+        /* Faster, more intense glitch keyframes for hover burst */
+        @keyframes glitch-anim {
+            0% { clip: rect(10px, 9999px, 40px, 0); transform: translate(1px, -1px); }
+            20% { clip: rect(70px, 9999px, 120px, 0); transform: translate(-1px, 1px); }
+            40% { clip: rect(20px, 9999px, 50px, 0); transform: translate(1px, -1px); }
+            60% { clip: rect(90px, 9999px, 130px, 0); transform: translate(-1px, 1px); }
+            80% { clip: rect(50px, 9999px, 100px, 0); transform: translate(1px, -1px); }
+            100% { clip: rect(10px, 9999px, 110px, 0); transform: translate(-1px, 1px); }
+        }
+
+        @keyframes glitch-anim2 {
+            0% { clip: rect(76px, 9999px, 116px, 0); transform: translate(-1px, 1px); }
+            25% { clip: rect(12px, 9999px, 45px, 0); transform: translate(1px, -1px); }
+            50% { clip: rect(60px, 9999px, 95px, 0); transform: translate(-1px, 1px); }
+            75% { clip: rect(9px, 9999px, 55px, 0); transform: translate(1px, -1px); }
+            100% { clip: rect(76px, 9999px, 116px, 0); transform: translate(-1px, 1px); }
+        }
+
+        @keyframes glitch-skew {
+            0% { transform: skew(1deg); }
+            50% { transform: skew(-2deg); }
+            100% { transform: skew(0deg); }
+        }
+
+        /* --- CABINET DASHBOARD Dash BLOCK --- */
+        .cabinet-dashboard {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr 1fr;
+            align-items: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        /* Column 1: Gigs List */
+        .gigs-column h3 {
+            font-size: 11px;
+            color: var(--arcade-green);
+            margin-bottom: 1rem;
+        }
+        .gig-item {
+            font-size: 8px;
+            margin-bottom: 0.8rem;
+            white-space: nowrap;
+        }
+        .gig-date { color: var(--arcade-pink); margin-right: 8px; }
+        .gig-loc { color: var(--text-main); }
+
+        /* Column 2: Center Visual Sprite Area */
+        .sprite-column {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+        .center-logo {
+            max-width: 220px;
+            image-rendering: pixelated;
+            border: 4px solid var(--text-main);
+            padding: 4px;
+            background: #fff;
+            transform: rotate(-2deg);
+        }
+
+        /* Column 3: Interactive Vibe Switcher Component */
+        .vibe-column {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .vibe-title {
+            font-size: 10px;
+            color: var(--arcade-green);
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        .custom-toggle-frame {
+            border: 3px solid var(--text-main);
+            background: #000;
+            padding: 6px 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+        }
+        .toggle-knob {
+            width: 20px;
+            height: 20px;
+            background: var(--toggle-bg);
+            border: 2px solid #fff;
+        }
+        .toggle-status-text {
+            font-size: 9px;
+            color: #fff;
+        }
+        .toggle-sub {
+            font-size: 7px;
+            margin-top: 8px;
+            opacity: 0.7;
+        }
+
+        /* --- BOTTOM SUMMARY BOX ("WHO WE ARE") --- */
+        .cabinet-footer {
+            border-top: 3px dashed var(--panel-border);
+            padding-top: 1rem;
+            text-align: center;
+        }
+        .footer-title {
+            font-size: 12px;
+            color: var(--arcade-green);
+            margin-bottom: 0.8rem;
+        }
+        .footer-desc {
+            font-size: 8px;
+            line-height: 1.8;
+            max-width: 850px;
+            margin: 0 auto 1.2rem auto;
+            text-transform: uppercase;
+        }
+
+        /* Transmission Output Action Command */
+        .transmit-btn {
+            background: transparent;
+            border: 3px solid var(--arcade-pink);
+            color: var(--arcade-pink);
+            font-family: 'Press Start 2P', monospace;
+            padding: 8px 16px;
+            font-size: 10px;
+            cursor: pointer;
+            box-shadow: 4px 4px 0 var(--bg-color);
+        }
+        .transmit-btn:hover {
+            background: var(--arcade-pink);
+            color: #000;
+        }
+
+        /* Background Language Overlays */
+        .lang-stamp {
+            position: absolute;
+            font-size: 8px;
+            opacity: 0.12;
+            color: var(--text-main);
+            z-index: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="arcade-cabinet">
+        
+        <!-- Background Ambient Language Strings -->
+        <div class="lang-stamp" style="top: 15%; left: 4%;">പൊളി സനം</div>
+        <div class="lang-stamp" style="top: 25%; right: 5%;">WUNDERBAR</div>
+        <div class="lang-stamp" style="bottom: 30%; left: 35%;">வணக்கம்</div>
+        <div class="lang-stamp" style="top: 72%; right: 12%;">PROST</div>
+
+        <!-- TOP FRAME PANEL -->
+        <header class="cabinet-header">
+            <div class="band-name">CHAI UND BREZELN</div>
+            <!-- Header title now triggers glitch on hover -->
+            <h1 class="glitch-title" data-text="SELECT LEVEL / STAGE">SELECT LEVEL / STAGE</h1>
+        </header>
+
+        <!-- CENTER MATRIX HUB -->
+        <main class="cabinet-dashboard">
+            
+            <!-- LEFT: LEVEL SELECTIONS / GIGS -->
+            <div class="gigs-column">
+                <h3>UPCOMING GIGS</h3>
+                <div class="gig-item"><span class="gig-date">24/10</span><span class="gig-loc">/ MUNICH.DE // KRANHALLE</span></div>
+                <div class="gig-item"><span class="gig-date">02/11</span><span class="gig-loc">/ BLR.IN // HUMMING TREE</span></div>
+                <div class="gig-item"><span class="gig-date">15/11</span><span class="gig-loc">/ BERLIN.DE // SO36</span></div>
+                <div class="gig-item"><span class="gig-date">20/12</span><span class="gig-loc">/ KOCHI.IN // JTPAC</span></div>
+            </div>
+
+            <!-- MID: THE LOGO SPRITE CARTRIDGE -->
+            <div class="sprite-column">
+                <!-- Use your actualMaster 8-bit Logo Artwork File here -->
+                <img src="watermarked_img_10091509370697189786.png" alt="Chai und Brezeln 8bit Logo" class="center-logo">
+            </div>
+
+            <!-- RIGHT: EMULATED CONTROLLER SWITCH -->
+            <div class="vibe-column">
+                <div class="vibe-title">VIBE SELECT<br>(LITE/DRK)</div>
+                <div class="custom-toggle-frame" onclick="toggleVibeEngine()">
+                    <div class="toggle-knob"></div>
+                    <span id="toggleStatusLabel" class="toggle-status-text">DRK</span>
+                </div>
+                <div class="toggle-sub">(CURRENT TOGGLE)</div>
+            </div>
+
+        </main>
+
+        <!-- LOWER SCREEN TERMINAL -->
+        <footer class="cabinet-footer">
+            <!-- Footer title also triggers glitch on hover -->
+            <div class="footer-title glitch-title" data-text="who we are">who we are</div>
+            <p class="footer-desc">
+                CHAI GLASS AND BREZEL SPRITES COLLIDED INSIDE THE CRUNCH STATION. TWO SOUND OPERATORS FROM KERALA & TAMIL NADU MIXED HIGH-VOLTAGE FILTER COFFEE AUDIO SYSTEMS WITH TWO GERMAN DISTORTION WAVE GENERATORS. NO SMOOTH FUSION REGISTERED here. PURE DUAL-CULTURE CRASH.
+            </p>
+            <button class="transmit-btn" onclick="transmitMessage()">BOOK_US / TRANSMIT</button>
+        </footer>
+
+    </div>
+
+    <script>
+        // 1. LIGHT/DARK MATRIX TOGGLE INTERRUPT
+        function toggleVibeEngine() {
+            const doc = document.documentElement;
+            const label = document.getElementById('toggleStatusLabel');
+            
+            if (doc.getAttribute('data-theme') === 'light') {
+                doc.removeAttribute('data-theme');
+                label.innerText = "DRK";
+            } else {
+                doc.setAttribute('data-theme', 'light');
+                label.innerText = "LITE";
+            }
+        }
+
+        // 2. RETRO SHAKE TO SWAP CURSOR SPRITE
+        let cursorSprite = "☕";
+        function initCursorMatrix() {
+            const hr = new Date().getHours();
+            if (hr >= 16 || hr < 6) cursorSprite = "🥨";
+            renderCursor(cursorSprite);
+        }
+        function renderCursor(emoji) {
+            const cursorSvg = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" style="font-size:26px;"><text y="28">${emoji}</text></svg>`;
+            document.body.style.cursor = `url('${cursorSvg}') 12 12, auto`;
+        }
+
+        let px = null, py = null, pTime = null;
+        window.addEventListener('mousemove', (e) => {
+            let now = Date.now();
+            if (pTime !== null) {
+                let dx = e.screenX - px;
+                let dy = e.screenY - py;
+                let dt = now - pTime;
+                if (dt > 0) {
+                    let v = Math.abs(dx + dy) / dt * 1000;
+                    if (v > 1650) { // Shake detection trigger threshold
+                        cursorSprite = (cursorSprite === "☕") ? "🥨" : "☕";
+                        renderCursor(cursorSprite);
+                        pTime = now + 300; // Stall repeat bounce triggers
+                    }
+                }
+            }
+            px = e.screenX; py = e.screenY; pTime = now;
+        });
+        initCursorMatrix();
+
+        // 3. SECURE SIGNAL TRANSMISSION ROUTER
+        function transmitMessage() {
+            const u = "booking";
+            const d = "chaiundbrezeln.com";
+            window.location.href = `mailto:${u}@${d}?subject=Arcade%20Station%20Transmission`;
+        }
+    </script>
+</body>
+</html>
